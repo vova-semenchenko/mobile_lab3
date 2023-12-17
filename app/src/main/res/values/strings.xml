@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">Lab3Mobile</string>
+    <string name="title_activity_settings_item">settings_item</string>
+
+    <string name="title_default">Title</string>
+    <string name="description_default">Description</string>
+
+    <string-array name="settings_titles">
+        <item>Networks &amp; Internet</item>
+        <item>Connected Device</item>
+        <item>Apps</item>
+        <item>Notifications</item>
+        <item>Battery</item>
+        <item>Storage</item>
+        <item>Sounds &amp; Vibration</item>
+    </string-array>
+
+    <string-array name="settings_descriptions">
+        <item>Mobile, Wi-Fi, hotspot</item>
+        <item>Bluetooth, pairing</item>
+        <item>Assistant, recent apps, default apps</item>
+        <item>Notification history, conversations</item>
+        <item>72% - Until 12:45 PM</item>
+        <item>19% - 207 GB free</item>
+        <item>Volume, haptics, Do  Not Disturb</item>
+    </string-array>
+</resources>

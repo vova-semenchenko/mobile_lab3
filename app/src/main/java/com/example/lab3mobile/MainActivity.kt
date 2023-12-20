@@ -1,29 +1,38 @@
 package com.example.lab3mobile
 
+import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.lab3mobile.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private val adapter = SettingAdapter()
+    private lateinit var dataModel: SettingViewModel
 
+
+    @SuppressLint("NotifyDataSetChanged")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.recycleView.layoutManager = LinearLayoutManager(this@MainActivity)
+        dataModel = ViewModelProvider(this)[SettingViewModel::class.java]
+
+        binding.recycleView.layoutManager = LinearLayoutManager(this)
+
+        binding.button.setOnClickListener  {
+            val newSetting = Setting("New Title", "New Description")
+            dataModel.addSetting(newSetting)
+        }
+
+        var adapter = SettingAdapter(dataModel.getList)
         binding.recycleView.adapter = adapter
 
-        val settingsTitles: Array<String> = resources.getStringArray(R.array.settings_titles)
-        val settingsDescriptions: Array<String> = resources.getStringArray(R.array.settings_descriptions)
-        for (i in settingsTitles.indices) {
-            val setting = Setting(settingsTitles[i], settingsDescriptions[i])
-            adapter.addSettingItem(setting)
+        dataModel.getList.observe(this ) {
+            adapter.notifyDataSetChanged()
         }
     }
 }

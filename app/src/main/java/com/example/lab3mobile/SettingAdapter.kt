@@ -3,15 +3,15 @@ package com.example.lab3mobile
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lab3mobile.databinding.SettingsItemBinding
 
-class SettingAdapter: RecyclerView.Adapter<SettingAdapter.SettingHolder>() {
-
-    private val settingsList = ArrayList<Setting>()
+class SettingAdapter(private val settingsList: LiveData<List<Setting>>): RecyclerView.Adapter<SettingAdapter.SettingHolder>() {
 
     class SettingHolder(item: View) : RecyclerView.ViewHolder(item) {
-        private val binding= SettingsItemBinding.bind(item)
+        private val binding = SettingsItemBinding.bind(item)
         fun bind(setting: Setting) = with(binding) {
             titleView.text = setting.title
             descrioptionView.text = setting.description
@@ -24,15 +24,10 @@ class SettingAdapter: RecyclerView.Adapter<SettingAdapter.SettingHolder>() {
     }
 
     override fun getItemCount(): Int {
-        return settingsList.size
+        return settingsList.value!!.size
     }
 
     override fun onBindViewHolder(holder: SettingHolder, position: Int) {
-        holder.bind(settingsList[position])
-    }
-
-    fun addSettingItem(setting: Setting) {
-        settingsList.add(setting)
-        notifyDataSetChanged()
+        holder.bind(settingsList.value!![position])
     }
 }

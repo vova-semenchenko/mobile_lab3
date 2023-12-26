@@ -10,6 +10,8 @@ class SettingViewModel : ViewModel(){
         value = emptyList()
     }
 
+    val getList: LiveData<List<Setting>> = _myList
+
     private val settingsList = listOf(
         Setting("Networks & Internet", "Mobile, Wi-Fi, hotspot"),
         Setting("Connected Device", "Bluetooth, pairing"),
@@ -23,8 +25,6 @@ class SettingViewModel : ViewModel(){
     init {
         _myList.value = settingsList
     }
-
-    val getList: LiveData<List<Setting>> = _myList
 
     fun addSetting(value: Setting){
         _myList.value = _myList.value?.plus(value)

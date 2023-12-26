@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.lab3mobile.databinding.ActivityMainBinding
+import com.example.lab3mobile.models.Setting
 
 class MainActivity : AppCompatActivity() {
 
@@ -13,7 +14,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var dataModel: SettingViewModel
 
 
-    @SuppressLint("NotifyDataSetChanged")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
             dataModel.addSetting(newSetting)
         }
 
-        var adapter = SettingAdapter(dataModel.getList)
+        var adapter = RecyclerViewAdapter(dataModel.getList)
         binding.recycleView.adapter = adapter
 
         dataModel.getList.observe(this ) {

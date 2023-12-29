@@ -24,11 +24,14 @@ class SettingViewModel(application: Application) : AndroidViewModel(application)
     private val settingsList = listOf(
         Setting("Networks & Internet", "Mobile, Wi-Fi, hotspot"),
         Setting("Connected Device", "Bluetooth, pairing"),
-        ConfigurationSetting("Notifications", false),
         Setting("Apps", "Assistant, recent apps, default apps"),
         Setting("Battery", "72% - Until 12:45 PM"),
-        ConfigurationSetting("Storage", true),
         Setting("Sounds & Vibration", "Volume, haptics, Do  Not Disturb")
+    )
+
+    private val configurationsList = listOf(
+        ConfigurationSetting("Notifications", false),
+        ConfigurationSetting("Storage", true),
     )
 
 
@@ -37,43 +40,40 @@ class SettingViewModel(application: Application) : AndroidViewModel(application)
 //            repository.clearSettings()
 //            repository.clearConfigurationSettings()
 //
+//            settingsList.let {
+//                repository.insertSettings(it)
+//            }
 //
-//
-//            settingsList.forEach { item ->
-//                when(item) {
-//                    is Setting -> repository.insertSetting(item)
-//                    is ConfigurationSetting -> repository.insertConfigurationSetting(item)
-//                }
+//            configurationsList.let {
+//                repository.insertConfigurationSettings(it)
 //            }
 
-            _myList.value = repository.getAllSettings().plus(repository.getAllConfigurationSettings())
+            getLists()
         }
     }
 
-    private fun updateList() {
-        viewModelScope.launch {
-            _myList.value = repository.getAllSettings().plus(repository.getAllConfigurationSettings())
-        }
+    private fun getLists() = viewModelScope.launch {
+        _myList.value = repository.getAllSettings().plus(repository.getAllConfigurationSettings())
     }
 
     fun addSetting(setting: Setting) = viewModelScope.launch {
         repository.insertSetting(setting)
-        updateList()
+        getLists()
     }
 
     fun addConfigurationSetting(configurationSetting: ConfigurationSetting) = viewModelScope.launch {
         repository.insertConfigurationSetting(configurationSetting)
-        updateList()
+        getLists()
     }
 
     fun deleteSettingItem(setting: Setting) = viewModelScope.launch {
         repository.deleteSettingItem(setting)
-        updateList()
+        getLists()
     }
 
     fun updateConfigurationSetting(configurationSetting: ConfigurationSetting) = viewModelScope.launch {
         configurationSetting.isChecked = !configurationSetting.isChecked
         repository.updateConfigurationSetting(configurationSetting)
-        updateList()
+        getLists()
     }
 }

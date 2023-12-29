@@ -1,22 +1,23 @@
-package com.example.lab3mobile
+package com.example.lab3mobile.adapter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
-import com.example.lab3mobile.databinding.SettingWithToggleItemBinding
+import com.example.lab3mobile.databinding.ConfigurationSettingItemBinding
 import com.example.lab3mobile.databinding.SettingsItemBinding
-import com.example.lab3mobile.models.ItemTypeInterface
-import com.example.lab3mobile.models.Setting
-import com.example.lab3mobile.models.SettingWithSwitch
+import com.example.lab3mobile.model.ItemTypeInterface
+import com.example.lab3mobile.model.Setting
+import com.example.lab3mobile.model.ConfigurationSetting
+import kotlin.math.absoluteValue
 
-class RecyclerViewAdapter(private val settingsList: LiveData<List<ItemTypeInterface>>): RecyclerView.Adapter<RecyclerViewAdapter.MyHolder>() {
+class RecyclerViewAdapter(
+    private val settingsList: LiveData<List<ItemTypeInterface>>,
+    private var onClickListener: OnClickListener)
+    : RecyclerView.Adapter<RecyclerViewAdapter.MyHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyHolder {
-
-
 
         return when(viewType){
             ItemTypeInterface.settingType -> SettingHolder(
@@ -26,8 +27,8 @@ class RecyclerViewAdapter(private val settingsList: LiveData<List<ItemTypeInterf
                     ), parent, false
                 )
             )
-            else -> SettingWithSwitchHolder(
-                SettingWithToggleItemBinding.inflate(
+            else -> ConfigurationSettingHolder(
+                ConfigurationSettingItemBinding.inflate(
                     LayoutInflater.from(
                         parent.context
                     ), parent, false
@@ -41,7 +42,7 @@ class RecyclerViewAdapter(private val settingsList: LiveData<List<ItemTypeInterf
     }
 
     override fun onBindViewHolder(holder: MyHolder, position: Int) {
-        holder.bind(settingsList.value!![position])
+        holder.bind(settingsList.value!![position], onClickListener)
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -49,22 +50,24 @@ class RecyclerViewAdapter(private val settingsList: LiveData<List<ItemTypeInterf
     }
 
     abstract class MyHolder(itemBinding: ViewBinding) : RecyclerView.ViewHolder(itemBinding.root){
-        abstract fun bind(item: ItemTypeInterface)
+        abstract fun bind(item: ItemTypeInterface, onClickListener: OnClickListener)
     }
 
     class SettingHolder(private val itemBinding: SettingsItemBinding) : MyHolder(itemBinding) {
-        override fun bind(item: ItemTypeInterface) = with(itemBinding){
+        override fun bind(item: ItemTypeInterface, onClickListener: OnClickListener) = with(itemBinding){
             item as Setting
             titleView.text = item.title
-            descrioptionView.text = item.description
+            descriptionView.text = item.description
+            deleteButton.setOnClickListener { onClickListener.onClick(item) }
         }
     }
 
-    class SettingWithSwitchHolder(private val itemBinding: SettingWithToggleItemBinding) : MyHolder(itemBinding) {
-        override fun bind(item: ItemTypeInterface) = with(itemBinding) {
-            item as SettingWithSwitch
+    class ConfigurationSettingHolder(private val itemBinding: ConfigurationSettingItemBinding) : MyHolder(itemBinding) {
+        override fun bind(item: ItemTypeInterface, onClickListener: OnClickListener) = with(itemBinding) {
+            item as ConfigurationSetting
             titleView.text = item.title
             switchButton.isChecked = item.isChecked
+            switchButton.setOnClickListener { onClickListener.onClick(item) }
         }
     }
 }

@@ -24,4 +24,6 @@
         <item>19% - 207 GB free</item>
         <item>Volume, haptics, Do  Not Disturb</item>
     </string-array>
+
+    <string name="button_description">This button performs an action</string>
 </resources>

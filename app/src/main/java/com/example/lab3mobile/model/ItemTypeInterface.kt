@@ -1,4 +1,4 @@
-package com.example.lab3mobile.models
+package com.example.lab3mobile.model
 
 interface ItemTypeInterface {
 

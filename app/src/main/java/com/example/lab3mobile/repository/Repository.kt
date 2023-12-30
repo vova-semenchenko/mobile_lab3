@@ -1,11 +1,45 @@
 package com.example.lab3mobile.repository
 
+import com.example.lab3mobile.api.Api
+import com.example.lab3mobile.api.RetrofitClient
 import com.example.lab3mobile.dao.SettingsDao
 import com.example.lab3mobile.model.ConfigurationSetting
-import com.example.lab3mobile.model.ItemTypeInterface
 import com.example.lab3mobile.model.Setting
 
 class Repository(private val settingDao: SettingsDao) {
+
+    private val retrofitClient = RetrofitClient.getClient()
+    private val api = retrofitClient.create(Api::class.java)
+
+    suspend fun loadSettings(): List<Setting>? {
+        val response = api.getAllSettings()
+        return if (response.isSuccessful) {
+            response.body()
+        }
+        else {
+            null
+        }
+    }
+
+    suspend fun loadSettingById(id: Long): Setting? {
+        val response = api.getSettingById(id)
+        return if (response.isSuccessful) {
+            response.body()
+        }
+        else {
+            null
+        }
+    }
+
+    suspend fun loadConfigurationSettings(): List<ConfigurationSetting>? {
+        val response = api.getAllConfigurationsSettings()
+        return if (response.isSuccessful) {
+            response.body()
+        }
+        else {
+            null
+        }
+    }
 
     suspend fun insertSetting(setting: Setting) {
         return settingDao.insertSetting(setting)

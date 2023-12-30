@@ -21,32 +21,26 @@ class SettingViewModel(application: Application) : AndroidViewModel(application)
 
     val getList: LiveData<List<ItemTypeInterface>> = _myList
 
-    private val settingsList = listOf(
-        Setting("Networks & Internet", "Mobile, Wi-Fi, hotspot"),
-        Setting("Connected Device", "Bluetooth, pairing"),
-        Setting("Apps", "Assistant, recent apps, default apps"),
-        Setting("Battery", "72% - Until 12:45 PM"),
-        Setting("Sounds & Vibration", "Volume, haptics, Do  Not Disturb")
-    )
-
-    private val configurationsList = listOf(
-        ConfigurationSetting("Notifications", false),
-        ConfigurationSetting("Storage", true),
-    )
-
 
     init {
         viewModelScope.launch {
-//            repository.clearSettings()
-//            repository.clearConfigurationSettings()
-//
-//            settingsList.let {
-//                repository.insertSettings(it)
-//            }
-//
-//            configurationsList.let {
-//                repository.insertConfigurationSettings(it)
-//            }
+            repository.clearSettings()
+            repository.clearConfigurationSettings()
+
+            val loadedSettingsList = repository.loadSettings()
+            loadedSettingsList?.let {
+                repository.insertSettings(it.take(2))
+            }
+
+            val loadedSettingById = repository.loadSettingById(4)
+            loadedSettingById?.let {
+                repository.insertSetting(it)
+            }
+
+            val loadedConfigurationsList = repository.loadConfigurationSettings()
+            loadedConfigurationsList?.let {
+                repository.insertConfigurationSettings(it)
+            }
 
             getLists()
         }

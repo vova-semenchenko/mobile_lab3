@@ -1,7 +1,6 @@
 package com.example.lab3mobile.api
 
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
 
 object RetrofitClient {
